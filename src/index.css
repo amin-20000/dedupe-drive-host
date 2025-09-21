@@ -2,41 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* File Vault Design System - Modern security-focused theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Background gradients */
+    --background: 220 25% 3%;
+    --background-secondary: 220 20% 5%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card system */
+    --card: 220 20% 7%;
+    --card-secondary: 220 25% 10%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Vault brand colors */
+    --primary: 195 100% 50%;
+    --primary-glow: 195 100% 65%;
+    --primary-dark: 195 100% 35%;
+    --primary-foreground: 220 25% 3%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Success states for uploads */
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted elements */
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 15% 60%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent for highlights */
+    --accent: 280 100% 70%;
+    --accent-foreground: 220 25% 3%;
 
+    /* Destructive actions */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 220 15% 25%;
+    --input: 220 20% 10%;
+    --ring: 195 100% 50%;
 
-    --radius: 0.5rem;
+    /* Security gradient backgrounds */
+    --gradient-primary: linear-gradient(135deg, hsl(195 100% 50%), hsl(195 100% 65%));
+    --gradient-vault: linear-gradient(135deg, hsl(220 25% 3%), hsl(220 20% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(220 20% 7%), hsl(220 25% 10%));
+    
+    /* Glow effects */
+    --glow-primary: 0 0 40px hsl(195 100% 50% / 0.3);
+    --glow-success: 0 0 30px hsl(142 76% 36% / 0.4);
+    
+    /* Animation timings */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
