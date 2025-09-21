@@ -3,17 +3,33 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { FileUpload } from './FileUpload';
-import { LogOut, Shield, Upload as UploadIcon } from 'lucide-react';
+import { FileList } from './FileList';
+import { FileSearch } from './FileSearch';
+import { StorageStats } from './StorageStats';
+import { LogOut, Shield, Upload as UploadIcon, Search, BarChart3 } from 'lucide-react';
+import { SearchFilters, useFiles } from '@/hooks/useFiles';
 import vaultLogo from '@/assets/vault-logo.png';
 
 export const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState<'upload' | 'files'>('upload');
+  const [activeTab, setActiveTab] = useState<'upload' | 'files' | 'stats'>('upload');
+  const [fileCount, setFileCount] = useState(0);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const { searchFiles, loadFiles } = useFiles();
 
   const handleUploadComplete = () => {
     // Refresh file list when upload completes
-    // For now, we'll just show a success state
-    console.log('Upload completed, would refresh file list here');
+    window.dispatchEvent(new CustomEvent('fileUploaded'));
+  };
+
+  const handleSearch = (filters: SearchFilters) => {
+    searchFiles(filters);
+    setIsSearchActive(true);
+  };
+
+  const handleClearSearch = () => {
+    loadFiles();
+    setIsSearchActive(false);
   };
 
   return (
@@ -63,7 +79,15 @@ export const Dashboard: React.FC = () => {
               className="flex items-center gap-2"
             >
               <Shield className="w-4 h-4" />
-              My Files
+              My Files ({fileCount})
+            </Button>
+            <Button
+              variant={activeTab === 'stats' ? 'default' : 'vault'}
+              onClick={() => setActiveTab('stats')}
+              className="flex items-center gap-2"
+            >
+              <BarChart3 className="w-4 h-4" />
+              Statistics
             </Button>
           </div>
 
@@ -90,18 +114,26 @@ export const Dashboard: React.FC = () => {
                 </p>
               </div>
               
-              <Card className="bg-gradient-card border-border">
-                <CardContent className="p-8 text-center">
-                  <Shield className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">File Management</h3>
-                  <p className="text-muted-foreground mb-4">
-                    File listing, search, and management features will be implemented here.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Coming in the next phase of development...
-                  </p>
-                </CardContent>
-              </Card>
+              <FileSearch 
+                onSearch={handleSearch}
+                onClearSearch={handleClearSearch}
+                isSearchActive={isSearchActive}
+              />
+              
+              <FileList onFileCountChange={setFileCount} />
+            </div>
+          )}
+
+          {activeTab === 'stats' && (
+            <div className="animate-slide-up">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold mb-2">Storage Statistics</h2>
+                <p className="text-muted-foreground">
+                  Monitor your storage usage and deduplication savings.
+                </p>
+              </div>
+              
+              <StorageStats fileCount={fileCount} />
             </div>
           )}
         </div>
