@@ -44,7 +44,8 @@ export const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, onDownl
   const [imageError, setImageError] = useState(false);
   
   const getFileUrl = () => {
-    return `${axios.defaults.baseURL}/files/${file.id}/download`;
+    const token = localStorage.getItem('token');
+    return `http://localhost:8080/files/${file.id}/preview${token ? `?auth=${encodeURIComponent(token)}` : ''}`;
   };
 
   const renderPreview = () => {

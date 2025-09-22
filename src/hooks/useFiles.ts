@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Set base URL for axios
+axios.defaults.baseURL = 'http://localhost:8080';
+
 export interface FileItem {
   id: number;
   filename: string;
