@@ -4,6 +4,20 @@ import axios from 'axios';
 // Set base URL for axios
 axios.defaults.baseURL = 'http://localhost:8080';
 
+// Add default headers for auth
+const getAuthToken = () => {
+  return localStorage.getItem('authToken');
+};
+
+// Set up axios interceptors for authentication
+axios.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export interface FileItem {
   id: number;
   filename: string;

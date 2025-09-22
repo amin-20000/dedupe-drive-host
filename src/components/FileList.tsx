@@ -29,7 +29,7 @@ import {
   Video,
   Archive
 } from 'lucide-react';
-import { useFiles, FileItem } from '@/hooks/useFiles';
+import { useFiles, FileItem, SearchFilters } from '@/hooks/useFiles';
 import { useToast } from '@/hooks/use-toast';
 import { FilePreview } from './FilePreview';
 
@@ -62,24 +62,41 @@ const formatDate = (dateString: string): string => {
 
 interface FileListProps {
   onFileCountChange?: (count: number) => void;
+  searchFilters?: SearchFilters | null;
+  isSearchActive?: boolean;
 }
 
-export const FileList: React.FC<FileListProps> = ({ onFileCountChange }) => {
-  const { files, pagination, loading, error, loadFiles, deleteFile, downloadFile } = useFiles();
+export const FileList: React.FC<FileListProps> = ({ 
+  onFileCountChange, 
+  searchFilters, 
+  isSearchActive 
+}) => {
+  const { files, pagination, loading, error, loadFiles, searchFiles, deleteFile, downloadFile } = useFiles();
   const { toast } = useToast();
   const [previewFile, setPreviewFile] = useState<FileItem | null>(null);
 
+  const loadFilesData = async (page: number = 1) => {
+    if (isSearchActive && searchFilters) {
+      await searchFiles(searchFilters, page);
+    } else {
+      await loadFiles(page);
+    }
+    onFileCountChange?.(pagination.totalFiles);
+  };
+
   useEffect(() => {
-    loadFiles();
+    loadFilesData();
     
     // Listen for file upload events
     const handleFileUploaded = () => {
-      loadFiles();
+      if (!isSearchActive) {
+        loadFiles();
+      }
     };
     
     window.addEventListener('fileUploaded', handleFileUploaded);
     return () => window.removeEventListener('fileUploaded', handleFileUploaded);
-  }, []);
+  }, [searchFilters, isSearchActive]);
 
   useEffect(() => {
     onFileCountChange?.(pagination.totalFiles);
@@ -113,7 +130,7 @@ export const FileList: React.FC<FileListProps> = ({ onFileCountChange }) => {
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= pagination.totalPages) {
-      loadFiles(page);
+      loadFilesData(page);
     }
   };
 

@@ -15,6 +15,7 @@ export const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'upload' | 'files' | 'stats'>('upload');
   const [fileCount, setFileCount] = useState(0);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [searchFilters, setSearchFilters] = useState<SearchFilters | null>(null);
   const { searchFiles, loadFiles } = useFiles();
 
   const handleUploadComplete = () => {
@@ -23,12 +24,12 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleSearch = (filters: SearchFilters) => {
-    searchFiles(filters);
+    setSearchFilters(filters);
     setIsSearchActive(true);
   };
 
   const handleClearSearch = () => {
-    loadFiles();
+    setSearchFilters(null);
     setIsSearchActive(false);
   };
 
@@ -120,7 +121,11 @@ export const Dashboard: React.FC = () => {
                 isSearchActive={isSearchActive}
               />
               
-              <FileList onFileCountChange={setFileCount} />
+              <FileList 
+                onFileCountChange={setFileCount} 
+                searchFilters={searchFilters}
+                isSearchActive={isSearchActive}
+              />
             </div>
           )}
 
