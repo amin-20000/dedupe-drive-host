@@ -65,8 +65,8 @@ export const StorageStats: React.FC<StorageStatsProps> = ({ fileCount = 0 }) => 
     );
   }
 
-  const quotaUsedPercentage = Math.min(stats.quota_used_percentage, 100);
-  const savingsPercentage = stats.storage_savings_percentage;
+  const quotaUsedPercentage = Math.min(stats.quota_used_percentage || 0, 100);
+  const savingsPercentage = stats.storage_savings_percentage || 0;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -81,7 +81,7 @@ export const StorageStats: React.FC<StorageStatsProps> = ({ fileCount = 0 }) => 
             <div className="flex justify-between text-sm">
               <span>Used</span>
               <span className="font-mono">
-                {formatFileSize(stats.original_storage_used_bytes)} / {stats.storage_quota_mb}MB
+                {formatFileSize(stats.original_storage_used_bytes || 0)} / {stats.storage_quota_mb || 0}MB
               </span>
             </div>
             <Progress 
@@ -89,7 +89,7 @@ export const StorageStats: React.FC<StorageStatsProps> = ({ fileCount = 0 }) => 
               className="h-2"
             />
             <p className="text-xs text-muted-foreground">
-              {quotaUsedPercentage.toFixed(1)}% of quota used
+              {(quotaUsedPercentage || 0).toFixed(1)}% of quota used
             </p>
           </div>
         </CardContent>
@@ -104,7 +104,7 @@ export const StorageStats: React.FC<StorageStatsProps> = ({ fileCount = 0 }) => 
           </div>
           <div className="space-y-1">
             <p className="text-lg font-mono">
-              {formatFileSize(stats.total_storage_used_bytes)}
+              {formatFileSize(stats.total_storage_used_bytes || 0)}
             </p>
             <p className="text-xs text-muted-foreground">
               Physical space used
@@ -122,10 +122,10 @@ export const StorageStats: React.FC<StorageStatsProps> = ({ fileCount = 0 }) => 
           </div>
           <div className="space-y-1">
             <p className="text-lg font-mono text-green-400">
-              {formatFileSize(stats.storage_savings_bytes)}
+              {formatFileSize(stats.storage_savings_bytes || 0)}
             </p>
             <p className="text-xs text-muted-foreground">
-              {savingsPercentage.toFixed(1)}% savings
+              {(savingsPercentage || 0).toFixed(1)}% savings
             </p>
           </div>
         </CardContent>

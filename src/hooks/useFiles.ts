@@ -72,8 +72,16 @@ export const useFiles = () => {
     setLoading(true);
     setError(null);
     try {
+      // Clean up filters - remove empty values
+      const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          acc[key] = value;
+        }
+        return acc;
+      }, {} as any);
+
       const response = await axios.get<FileListResponse>('/search', {
-        params: { ...filters, page, pageSize }
+        params: { ...cleanFilters, page, pageSize }
       });
       setFiles(response.data.files);
       setPagination(response.data.pagination);
